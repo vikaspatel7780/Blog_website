@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import BlogCard from "./BlogCard";
 import { useSelector, useDispatch } from "react-redux"; // Combine import statements
 import { allBlog } from "../redux/UserSlice";
-
+import USER_API_END_POINT from "./Constant"
 const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -13,7 +13,7 @@ const Home = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/v1/users/allPost', {
+        const response = await fetch(`${USER_API_END_POINT}/allPost`, {
           method: 'GET', // Correct HTTP method for fetching data
           headers: {
             'Content-Type': 'application/json',

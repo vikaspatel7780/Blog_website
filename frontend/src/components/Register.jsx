@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
+import USER_API_END_POINT from "./Constant"
 
 const Register = () => {
   const [fullName, setFullName] = useState("");
@@ -16,7 +17,7 @@ const Register = () => {
     setLoading(true); // Set loading to true when request starts
 
     try {
-      const response = await fetch(`http://localhost:5000/api/v1/users/register`, {
+      const response = await fetch(`${USER_API_END_POINT}/register`, {
         method: "POST",
        credentials: 'include',
         body: JSON.stringify({

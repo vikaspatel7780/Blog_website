@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import USER_API_END_POINT from './Constant'
 
 const Post = () => {
   const [title, setTitle] = useState("");
@@ -16,7 +17,7 @@ const Post = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/v1/users/posts", {
+      const response = await fetch(`${USER_API_END_POINT}/posts`, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({ title, content, userId: userInfo._id }),

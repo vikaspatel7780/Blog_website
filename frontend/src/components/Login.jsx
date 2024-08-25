@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../redux/UserSlice";
+import USER_API_END_POINT from './Constant'
 const Login = () => {
   const [usernameOrEmail, setUsernameOrEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,7 +26,7 @@ const Login = () => {
     const username = isEmail ? "" : usernameOrEmail;
   
     try {
-      const result = await fetch(`http://localhost:5000/api/v1/users/login`, {
+      const result = await fetch(`${USER_API_END_POINT}/login`, {
         method: "POST",
         body: JSON.stringify({
           email: email,

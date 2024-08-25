@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import USER_API_END_POINT from "./Constant"
 
 const Update = () => {
   const [title, setTitle] = useState("");
@@ -33,7 +34,7 @@ console.log(blogId)
     setLoading(true);
 
     try {
-      const response = await fetch(`http://localhost:5000/api/v1/users/update/${blogId}`, {
+      const response = await fetch(`${USER_API_END_POINT}/update/${blogId}`, {
         method: "PUT",
         credentials: "include",
         body: JSON.stringify({

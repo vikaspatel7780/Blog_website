@@ -4,6 +4,7 @@ import { IoMenu } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
 import { useDispatch } from "react-redux";
 import { logout , loginSuccess , allBlog} from "../redux/UserSlice";
+import USER_API_END_POINT from './Constant'
 import toast from "react-hot-toast";
 
 function Header() {
@@ -16,7 +17,7 @@ function Header() {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/v1/users/logout`, {
+      const response = await fetch(`${USER_API_END_POINT}/logout`, {
         method: "POST",
        credentials: 'include'
       });
