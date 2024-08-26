@@ -13,5 +13,4 @@ router.route("/allPost").get(isAuthenticated, AllPost)
 router.route("/posts/:id").get(isAuthenticated, getBlog)
 router.route("/update/:id").put(isAuthenticated, UpdateBlog)
 router.route("/delete/:id").delete(isAuthenticated, deleteBlog)
-
 export default router;
