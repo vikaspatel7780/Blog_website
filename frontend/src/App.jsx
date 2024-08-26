@@ -8,6 +8,7 @@ import Home from "./components/Home";
 import Post from "./components/PostBlog";
 import Update from "./components/Update";
 import BlogBody from "./components/blogody";
+// import Delete from "./components/Delete";
 
 
 const App = () => {

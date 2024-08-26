@@ -23,6 +23,9 @@ const userSlice = createSlice({
       localStorage.removeItem('userInfo');
       localStorage.removeItem('blogInfo');
     },
+    removeBlog: (state, action) => {
+      state.blogInfo = state.blogInfo.filter(blog => blog._id !== action.payload);
+    },
     // Action to handle fetching all blogs
     allBlog(state, action) {
       state.blogInfo = action.payload; // Updating blogInfo
@@ -32,5 +35,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { loginSuccess, logout, allBlog } = userSlice.actions;
+export const { loginSuccess, logout, allBlog , removeBlog} = userSlice.actions;
 export default userSlice.reducer;

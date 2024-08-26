@@ -10,14 +10,20 @@ dotenv.config();
 const app = express();
 
 // Define CORS options
-const corsOptions = {
-    origin: [process.env.CORS_ORIGIN], // Allow this origin only
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
-    credentials: true, // Allow credentials (cookies, authorization headers, etc.)
-};
+const allowedOrigins = process.env.CORS_ORIGIN.split(',');
 
-// Use CORS middleware with the defined options
-app.use(cors(corsOptions));
+app.use(cors({
+    origin: function(origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) !== -1) {
+            return callback(null, true);
+        }
+        const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+        return callback(new Error(msg), false);
+    },
+    credentials: true
+}));
 
 // Optional: Log each request to help with debugging CORS issues
 app.use((req, res, next) => {
@@ -35,6 +41,6 @@ app.use(express.json());
 app.use('/api/v1/users', blogRouter);
 
 // Handle preflight requests for CORS
-app.options('*', cors(corsOptions)); // Ensures preflight requests are handled with CORS options
+// app.options('*', cors(corsOptions)); // Ensures preflight requests are handled with CORS options
 
 export default app;
