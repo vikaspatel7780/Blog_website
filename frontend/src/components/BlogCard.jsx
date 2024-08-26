@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { CiUser } from "react-icons/ci";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import USER_API_END_POINT from "./Constant";
 import { useDispatch } from "react-redux";
 import { removeBlog } from "../redux/UserSlice";
@@ -11,6 +10,7 @@ import { removeBlog } from "../redux/UserSlice";
 function BlogCard({ title, content, author, date, Id, userId, mainUserId }) {
   const [loading, setLoading] = useState(false); // Loading state
   const dispatch = useDispatch();
+  const navigate = useNavigate(); // Hook for navigating
 
   const deleteHandle = async () => {
     setLoading(true); // Set loading to true when delete starts
@@ -34,6 +34,10 @@ function BlogCard({ title, content, author, date, Id, userId, mainUserId }) {
     } finally {
       setLoading(false); // Reset loading state after completion
     }
+  };
+
+  const editHandle = () => {
+    navigate(`/update/${Id}`);
   };
 
   const truncatedContent =
@@ -83,7 +87,7 @@ function BlogCard({ title, content, author, date, Id, userId, mainUserId }) {
                 <button
                   className="text-blue-500 hover:text-blue-700 transition-colors duration-300 focus:outline-none"
                   title="Edit"
-                  onClick={deleteHandle}
+                  onClick={editHandle}
                   disabled={loading} // Disable button while loading
                 >
                   <FaEdit size={22} />

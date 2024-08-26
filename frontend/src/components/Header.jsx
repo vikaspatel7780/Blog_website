@@ -1,15 +1,16 @@
 import React, { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { IoMenu } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
 import { useDispatch } from "react-redux";
-import { logout, loginSuccess, allBlog } from "../redux/UserSlice";
+import { logout } from "../redux/UserSlice";
 import USER_API_END_POINT from './Constant';
 import toast from "react-hot-toast";
 
 function Header() {
   const [isToggled, setToggled] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleClick = () => {
     setToggled(!isToggled);
@@ -28,8 +29,10 @@ function Header() {
         toast.error(data.message || "Logout failed");
         return;
       }
+
       dispatch(logout());
       toast.success(data.message);
+      navigate("/login"); // Navigate to login page after successful logout
     } catch (error) {
       console.error("Logout failed:", error);
       toast.error("Logout failed: " + error.message);
@@ -64,27 +67,29 @@ function Header() {
           </li>
         </ul>
 
-        <Link to="/login">
-          <button
-            className="hidden bg-red-600 p-2 rounded-sm text-sm md:block"
-            onClick={handleLogout}
-          >
-            Logout
-          </button>
-        </Link>
+        <button
+          className="hidden bg-red-600 p-2 rounded-sm text-sm md:block"
+          onClick={handleLogout}
+        >
+          Logout
+        </button>
 
         <div className="md:hidden text-4xl" onClick={handleClick}>
-          <button><IoMenu /></button>
+          {isToggled ? <RxCross2 /> : <IoMenu />}
         </div>
       </nav>
+
       <ul
         className={`md:hidden gap-4 text-xl bg-black w-full p-4 absolute z-20 ${
           isToggled ? "flex flex-col items-center" : "hidden"
         }`}
       >
-       <div className=" flex w-full justify-end cursor-pointer text-4xl" onClick={handleClick} > 
-       <RxCross2 />
-       </div>
+        <div
+          className="flex w-full justify-end cursor-pointer text-4xl"
+          onClick={handleClick}
+        >
+          <RxCross2 />
+        </div>
         <li className="cursor-pointer" onClick={handleClick}>
           <NavLink
             to="/"
@@ -107,14 +112,9 @@ function Header() {
           </NavLink>
         </li>
         <li className="cursor-pointer" onClick={handleClick}>
-        <Link to="/login">
-          <button
-            className=" bg-red-600 p-2 rounded-sm text-sm"
-            onClick={handleLogout}
-          >
+          <button className="bg-red-600 p-2 rounded-sm text-sm" onClick={handleLogout}>
             Logout
           </button>
-        </Link>
         </li>
       </ul>
     </header>
