@@ -3,10 +3,9 @@ import jwt from "jsonwebtoken";
 const isAuthenticated = (req, res, next) => {
     try {
         const token =
-      req.cookies?.token ||
-      req.headers["authorization"]?.replace("Bearer ", "");
+            req.cookies?.token || // Attempt to retrieve token from cookies
+            req.headers["authorization"]?.replace("Bearer ", ""); // Or from Authorization header
 
-       console.log( req.cookies)
         if (!token) {
             return res.status(401).json({
                 message: "User not authenticated.",
@@ -20,7 +19,7 @@ const isAuthenticated = (req, res, next) => {
         return next();
         
     } catch (error) {
-        console.log(error);
+        console.error("Authentication error:", error.message); // Log the error message
         return res.status(401).json({
             message: "Invalid or expired token.",
             success: false

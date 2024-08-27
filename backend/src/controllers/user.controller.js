@@ -6,43 +6,44 @@ import {errorHandler} from "../utils/errorHandler.js"; // Adjusting import, assu
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password, username } = req.body;
 
-  // Check if username or email is provided
   if (!username && !email) {
     return errorHandler(res, "Please provide either username or email", 400);
   }
 
-  // Find the user by username or email
   const user = await User.findOne({ $or: [{ username }, { email }] });
-
-  // Check if the user exists
   if (!user) {
     return errorHandler(res, "User does not exist", 400);
   }
 
-  // Verify the password
   const isPasswordCorrect = await user.isPasswordCorrect(password);
   if (!isPasswordCorrect) {
     return errorHandler(res, "Invalid password.", 401);
   }
 
-  // Fetch the logged-in user details without the password field
   const loggedInUser = await User.findById(user._id).select("-password");
+  const tokenData = { userId: user._id };
 
-  // Return the success response
-  const tokenData = {
-    userId: user._id
-}
-const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET, { expiresIn: "1d" });
+  try {
+    const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET, { expiresIn: "1d" });
 
-  return res.status(200)
-  .cookie("token", token, { expiresIn: "1d", httpOnly: true, secure: true})
-  .json({
-    message: "User logged in successfully.",
-    success: true,
-    user: loggedInUser,
-  });
+    return res.status(200)
+      .cookie("token", token, {
+        maxAge: 24 * 60 * 60 * 1000,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: 'Strict'
+      })
+      .json({
+        message: "User logged in successfully.",
+        success: true,
+        user: loggedInUser,
+      });
+
+  } catch (error) {
+    console.error("Token generation error:", error.message);
+    return errorHandler(res, "Internal server error", 500);
+  }
 });
-
 
 const registerUser = asyncHandler( async (req, res) =>{
     const { username, email, password,fullName, role} = req.body;

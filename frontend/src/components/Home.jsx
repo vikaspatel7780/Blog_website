@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import BlogCard from "./BlogCard";
 import { useSelector, useDispatch } from "react-redux"; // Combine import statements
 import { allBlog } from "../redux/UserSlice";
-import USER_API_END_POINT from "./Constant"
+import USER_API_END_POINT from "./Constant";
+
 const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -43,7 +44,8 @@ const Home = () => {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
-  console.log(blogs)
+  
+  console.log(blogs);
 
   return (
     <div className="home">
@@ -52,16 +54,18 @@ const Home = () => {
         <div className="flex justify-center gap-10 flex-wrap">
           {blogs && blogs.length > 0 ? ( // Check if blogs is defined and is an array
             blogs.map(blog => (
-              <BlogCard 
-                key={blog._id} 
-                mainUserId={user._id}
-                userId={blog.author._id}
-                Id={blog._id} 
-                title={blog.title} 
-                content={blog.content} 
-                author={blog?.author?.fullName} 
-                date={new Date(blog.createdAt).toLocaleDateString()} 
-              />
+              blog && blog._id && blog.author ? ( // Add checks to ensure blog and author exist
+                <BlogCard 
+                  key={blog._id} 
+                  mainUserId={user ? user._id : ''} // Check if user is not null
+                  userId={blog.author._id} 
+                  Id={blog._id} 
+                  title={blog.title} 
+                  content={blog.content} 
+                  author={blog.author.fullName} 
+                  date={new Date(blog.createdAt).toLocaleDateString()} 
+                />
+              ) : null
             ))
           ) : (
             <p>No blogs available</p>
