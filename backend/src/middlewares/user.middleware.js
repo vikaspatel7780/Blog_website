@@ -5,7 +5,7 @@ const isAuthenticated = (req, res, next) => {
         const token =
             req.cookies?.token || // Attempt to retrieve token from cookies
             req.headers["authorization"]?.replace("Bearer ", ""); // Or from Authorization header
-
+            console.log(token);
         if (!token) {
             return res.status(401).json({
                 message: "User not authenticated.",
